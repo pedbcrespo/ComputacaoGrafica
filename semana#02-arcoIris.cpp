@@ -15,7 +15,7 @@ int main() {
         }
     }
 
-    img.savePNG("rainbown.png");
+    img.savePNG("arcoIris.png");
 
     return 0;
 }
