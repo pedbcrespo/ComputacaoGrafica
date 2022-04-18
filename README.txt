@@ -1,13 +1,10 @@
-Testando minha conta...
+Computação Gráfica 2022.1
 
-Podemos usar esse arquivo pra escrever algo iportante... como:
+Semana 01: FEITO
 
-Como rodar arquivos .cpp no terminal:
+Semana 02: FEITO
 
-1:
-g++ [nome_do_arquivo.cpp] [outros_arquivos_necessarios.cpp] -o [nome_do_arquivo_executável.exe]
+Semana 03:
 
-2:
-./[nome_do_arquivo_executavel.exe]
-
-PS: não é pra usar os "[]"
+  [ ] - Fazer boneco com funções implícitas
+  [ ] - Scanline???
