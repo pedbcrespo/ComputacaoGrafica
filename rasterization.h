@@ -5,6 +5,8 @@
 #include <cmath>
 #include "vec.h"
 #include "geometry.h"
+#include <iostream>
+#include <list>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -139,11 +141,100 @@ std::vector<Pixel> simple_rasterize_triangle(const Tri& P){
 	return out;
 }
 
+struct Reta{
+	float a, b;
+	bool vertical = false;
+	bool horizontal = false;
+	vec2 ponto;
+};
+
+float interception(float y, Reta r){
+	// y = ax + b
+	// x = y - b / a
+	return (y - r.b) / r.a;
+}
+
 template<class Tri>
 std::vector<Pixel> scanline(const Tri& P){
-	/* TAREFA */
+	vec2 A = P[0];
+	vec2 B = P[1];
+	vec2 C = P[2];
+
+	int xmin =  ceil(std::min({A[0], B[0], C[0]}));
+	int xmax = floor(std::max({A[0], B[0], C[0]}));
+	int ymin =  ceil(std::min({A[1], B[1], C[1]}));
+	int ymax = floor(std::max({A[1], B[1], C[1]}));
+
+	// Calcular o coeficiente angular e linear das 3 retas que formam o triangulo
+	Reta reta[3]; 
+
+	for (int i = 0; i < 3; i++){
+		
+		int index1, index2;
+		if (i < 2){
+			index1 = i;
+			index2 = i + 1;
+		} else {
+			index1 = 0;
+			index2 = i;
+		}
+		// Estudo de casos das retas:
+
+		// Caso #1: reta horizontal
+		if (P[index1][1] - P[index2][1] == 0){
+			reta[i].horizontal = true;
+			reta[i].ponto = P[index1];
+		}
+		// Caso #2: reta vertical
+		else if (P[index1][0] - P[index2][0] == 0){
+			reta[i].vertical = true;
+		}
+		// Caso #3: demais casos
+		else {
+			// Equação da reta é: y = ax + b
+			// Logo a = DeltaY / DeltaX
+			// E b = y - ax
+			reta[i].a = (P[index2][1] - P[index1][1]) / (P[index2][0] - P[index1][0]);
+			reta[i].b = P[index1][1] - (reta[i].a * P[index1][0]);
+			reta[i].ponto = P[index1];
+		}
+
+		std::cout << std::endl << index1 << index2 << std::endl << std::endl;
+
+		std::cout << reta[i].a << std::endl << reta[i].b << std::endl << std::endl;
+	}
+
 	std::vector<Pixel> out;
+
+	std::vector<float> inter;
+
+	for (int y = ymin; y < ymax; y++){
+		// Para cada y, calcular interseções
+		for (int i = 0; i < 3; i++){
+			float x = interception(y, reta[i]);
+			if (x < xmax && x > xmin){
+				inter.push_back(x);
+			}
+		}
+		// Verificar qual a interseção é a max ou min
+		int max, min;
+		if (inter.size() == 2){
+			max = floor(std::max(inter[0], inter[1]));
+			min = ceil(std::min(inter[0], inter[1]));
+		}
+		else if (inter.size() == 3){
+			max = floor(std::max(inter[0], inter[1], inter[2]));
+			min = ceil(std::min(inter[0], inter[1], inter[2]));
+		}
+
+		for (int x = min; x < max; x++){
+			out.push_back({x, y});
+		}
+		inter.clear();
+	}
+
 	return out;
 }
+
 
 #endif
