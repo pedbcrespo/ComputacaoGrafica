@@ -148,14 +148,61 @@ struct Reta{
 	vec2 ponto;
 };
 
-float interception(float y, Reta r){
-	// y = ax + b
-	// x = y - b / a
-	return (y - r.b) / r.a;
+float interception(int y, Reta r){
+	return (float)(y - r.b) / r.a;
 }
 
 template<class Tri>
-std::vector<Pixel> scanline(const Tri& P){
+std::vector<Pixel> scanline2(const Tri& P) {
+	int xmin =  ceil(std::min({P[0][0], P[1][0], P[2][0]}));
+	int xmax = floor(std::max({P[0][0], P[1][0], P[2][0]}));
+	int ymin =  ceil(std::min({P[0][1], P[1][1], P[2][1]}));
+	int ymax = floor(std::max({P[0][1], P[1][1], P[2][1]}));
+	std::vector<Pixel> out;
+	Reta reta[3]; 
+	for (int i = 0; i < 3; i++) {
+		int index1, index2;
+		if (i < 2){
+			index1 = i;
+			index2 = i + 1;
+		} else {
+			index1 = 0;
+			index2 = i;
+		}
+		reta[i].a = (P[index2][1] - P[index1][1]) / (P[index2][0] - P[index1][0]);
+		reta[i].b = P[index1][1] - (reta[i].a * P[index1][0]);
+	}	
+	for (int y = ymin; y < ymax; y++) {
+		std::vector<int> inter;
+		for (int i = 0; i < 3; i++) {
+			float a = interception(y, reta[i]);
+			if (a > xmin && a < xmax) {
+				inter.push_back(round(a));
+			}
+			std::cout << a << std::endl;
+		}
+		int min, max;
+		if (inter. == 2) {
+			min = ceil(std::min(inter[0], inter[1]));
+			max = floor(std::max(inter[0], inter[1]));
+		}
+		else if (inter.size == 3) {
+			min = ceil(std::min(inter[0], inter[1], inter[2]));
+			max = floor(std::max(inter[0], inter[1], inter[2]));
+		}
+		for (int x = min; x < max; x++) {
+			Pixel p;
+			p.x = x;
+			p.y = y;
+			out.push_back(p);
+		}
+	}
+	
+	return out;
+}
+
+template<class Tri>
+std::vector<Pixel> scanline(const Tri& P) {
 	vec2 A = P[0];
 	vec2 B = P[1];
 	vec2 C = P[2];
@@ -168,7 +215,7 @@ std::vector<Pixel> scanline(const Tri& P){
 	// Calcular o coeficiente angular e linear das 3 retas que formam o triangulo
 	Reta reta[3]; 
 
-	for (int i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++) {
 		
 		int index1, index2;
 		if (i < 2){
@@ -198,10 +245,6 @@ std::vector<Pixel> scanline(const Tri& P){
 			reta[i].b = P[index1][1] - (reta[i].a * P[index1][0]);
 			reta[i].ponto = P[index1];
 		}
-
-		std::cout << std::endl << index1 << index2 << std::endl << std::endl;
-
-		std::cout << reta[i].a << std::endl << reta[i].b << std::endl << std::endl;
 	}
 
 	std::vector<Pixel> out;
@@ -227,6 +270,11 @@ std::vector<Pixel> scanline(const Tri& P){
 			min = ceil(std::min(inter[0], inter[1], inter[2]));
 		}
 
+		std::cout << "y: " << y << std::endl;
+		std::cout << "xmax: " << max << std::endl;
+		std::cout << "xmin: " << min << std::endl;
+		std::cout << std::endl;
+
 		for (int x = min; x < max; x++){
 			out.push_back({x, y});
 		}
@@ -235,6 +283,5 @@ std::vector<Pixel> scanline(const Tri& P){
 
 	return out;
 }
-
 
 #endif

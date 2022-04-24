@@ -7,10 +7,7 @@ int main(){
 
 	vec2 T[] = { {20, 50}, {524, 100}, {205, 567} };
 
-	for(Pixel p : rasterizeTriangle(T))
-		Img(p.x, p.y) = blue;
-	
-	for(Pixel p : scanline(T))
+	for(Pixel p : scanline2(T))
 		Img(p.x, p.y) = red;
 
 	Img.savePNG("output.png");
