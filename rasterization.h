@@ -5,6 +5,8 @@
 #include <cmath>
 #include "vec.h"
 #include "geometry.h"
+#include <iostream>
+#include <list>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -139,11 +141,57 @@ std::vector<Pixel> simple_rasterize_triangle(const Tri& P){
 	return out;
 }
 
-template<class Tri>
-std::vector<Pixel> scanline(const Tri& P){
-	/* TAREFA */
-	std::vector<Pixel> out;
-	return out;
+float inter(vec2 P1, vec2 P2, int y) {
+	if (y < P1[1] && y < P2[1]){
+		return NAN;
+	}
+	else if (y > P1[1] && y > P2[1]) {
+		return NAN;
+	}
+	else if (P1[1] - P2[1] == 0) {
+		return P1[0];
+	}
+	else {
+		float t = (y - P1[1]) / (P2[1] - P1[1]);
+		return P1[0] + t * (P2[0] - P1[0]);
+	}
 }
+
+template<class Tri>
+std::vector<Pixel> scanline(const Tri& P) {
+	vec2 A = P[0];
+	vec2 B = P[1];
+	vec2 C = P[2];
+	int ymin =  ceil(std::min({A[1], B[1], C[1]}));
+	int ymax = floor(std::max({A[1], B[1], C[1]}));
+
+	std::vector<Pixel> out;
+
+	for (int y = ymin; y <= ymax; y++) {
+		std::vector<float> values;
+
+		values.push_back(inter(A, B, y));
+		values.push_back(inter(B, C, y));
+		values.push_back(inter(C, A, y));
+
+		int min = ceil(std::fmin(
+			std::fmin(values[0], values[1]),
+			std::fmin(values[1], values[2])));
+		int max = floor(std::fmax(
+			std::fmax(values[0], values[1]),
+			std::fmax(values[1], values[2])));
+
+		std::cout << min << std::endl << max << std::endl;
+
+    	for (int x = min; x <= max; x++) {
+			Pixel p;
+			p.x = x;
+			p.y = y;
+			out.push_back(p);
+   		}
+	}
+  	return out;
+}
+
 
 #endif
