@@ -141,64 +141,20 @@ std::vector<Pixel> simple_rasterize_triangle(const Tri& P){
 	return out;
 }
 
-struct Reta{
-	float a, b;
-	bool vertical = false;
-	bool horizontal = false;
-	vec2 ponto;
-};
-
-float interception(int y, Reta r){
-	return (float)(y - r.b) / r.a;
-}
-
-template<class Tri>
-std::vector<Pixel> scanline2(const Tri& P) {
-	int xmin =  ceil(std::min({P[0][0], P[1][0], P[2][0]}));
-	int xmax = floor(std::max({P[0][0], P[1][0], P[2][0]}));
-	int ymin =  ceil(std::min({P[0][1], P[1][1], P[2][1]}));
-	int ymax = floor(std::max({P[0][1], P[1][1], P[2][1]}));
-	std::vector<Pixel> out;
-	Reta reta[3]; 
-	for (int i = 0; i < 3; i++) {
-		int index1, index2;
-		if (i < 2){
-			index1 = i;
-			index2 = i + 1;
-		} else {
-			index1 = 0;
-			index2 = i;
-		}
-		reta[i].a = (P[index2][1] - P[index1][1]) / (P[index2][0] - P[index1][0]);
-		reta[i].b = P[index1][1] - (reta[i].a * P[index1][0]);
-	}	
-	for (int y = ymin; y < ymax; y++) {
-		std::vector<int> inter;
-		for (int i = 0; i < 3; i++) {
-			float a = interception(y, reta[i]);
-			if (a > xmin && a < xmax) {
-				inter.push_back(round(a));
-			}
-			std::cout << a << std::endl;
-		}
-		int min, max;
-		if (inter. == 2) {
-			min = ceil(std::min(inter[0], inter[1]));
-			max = floor(std::max(inter[0], inter[1]));
-		}
-		else if (inter.size == 3) {
-			min = ceil(std::min(inter[0], inter[1], inter[2]));
-			max = floor(std::max(inter[0], inter[1], inter[2]));
-		}
-		for (int x = min; x < max; x++) {
-			Pixel p;
-			p.x = x;
-			p.y = y;
-			out.push_back(p);
-		}
+float inter(vec2 P1, vec2 P2, int y) {
+	if (y < P1[1] && y < P2[1]){
+		return NAN;
 	}
-	
-	return out;
+	else if (y > P1[1] && y > P2[1]) {
+		return NAN;
+	}
+	else if (P1[1] - P2[1] == 0) {
+		return P1[0];
+	}
+	else {
+		float t = (y - P1[1]) / (P2[1] - P1[1]);
+		return P1[0] + t * (P2[0] - P1[0]);
+	}
 }
 
 template<class Tri>
@@ -206,82 +162,36 @@ std::vector<Pixel> scanline(const Tri& P) {
 	vec2 A = P[0];
 	vec2 B = P[1];
 	vec2 C = P[2];
-
-	int xmin =  ceil(std::min({A[0], B[0], C[0]}));
-	int xmax = floor(std::max({A[0], B[0], C[0]}));
 	int ymin =  ceil(std::min({A[1], B[1], C[1]}));
 	int ymax = floor(std::max({A[1], B[1], C[1]}));
 
-	// Calcular o coeficiente angular e linear das 3 retas que formam o triangulo
-	Reta reta[3]; 
-
-	for (int i = 0; i < 3; i++) {
-		
-		int index1, index2;
-		if (i < 2){
-			index1 = i;
-			index2 = i + 1;
-		} else {
-			index1 = 0;
-			index2 = i;
-		}
-		// Estudo de casos das retas:
-
-		// Caso #1: reta horizontal
-		if (P[index1][1] - P[index2][1] == 0){
-			reta[i].horizontal = true;
-			reta[i].ponto = P[index1];
-		}
-		// Caso #2: reta vertical
-		else if (P[index1][0] - P[index2][0] == 0){
-			reta[i].vertical = true;
-		}
-		// Caso #3: demais casos
-		else {
-			// Equação da reta é: y = ax + b
-			// Logo a = DeltaY / DeltaX
-			// E b = y - ax
-			reta[i].a = (P[index2][1] - P[index1][1]) / (P[index2][0] - P[index1][0]);
-			reta[i].b = P[index1][1] - (reta[i].a * P[index1][0]);
-			reta[i].ponto = P[index1];
-		}
-	}
-
 	std::vector<Pixel> out;
 
-	std::vector<float> inter;
+	for (int y = ymin; y <= ymax; y++) {
+		std::vector<float> values;
 
-	for (int y = ymin; y < ymax; y++){
-		// Para cada y, calcular interseções
-		for (int i = 0; i < 3; i++){
-			float x = interception(y, reta[i]);
-			if (x < xmax && x > xmin){
-				inter.push_back(x);
-			}
-		}
-		// Verificar qual a interseção é a max ou min
-		int max, min;
-		if (inter.size() == 2){
-			max = floor(std::max(inter[0], inter[1]));
-			min = ceil(std::min(inter[0], inter[1]));
-		}
-		else if (inter.size() == 3){
-			max = floor(std::max(inter[0], inter[1], inter[2]));
-			min = ceil(std::min(inter[0], inter[1], inter[2]));
-		}
+		values.push_back(inter(A, B, y));
+		values.push_back(inter(B, C, y));
+		values.push_back(inter(C, A, y));
 
-		std::cout << "y: " << y << std::endl;
-		std::cout << "xmax: " << max << std::endl;
-		std::cout << "xmin: " << min << std::endl;
-		std::cout << std::endl;
+		int min = ceil(std::fmin(
+			std::fmin(values[0], values[1]),
+			std::fmin(values[1], values[2])));
+		int max = floor(std::fmax(
+			std::fmax(values[0], values[1]),
+			std::fmax(values[1], values[2])));
 
-		for (int x = min; x < max; x++){
-			out.push_back({x, y});
-		}
-		inter.clear();
+		std::cout << min << std::endl << max << std::endl;
+
+    	for (int x = min; x <= max; x++) {
+			Pixel p;
+			p.x = x;
+			p.y = y;
+			out.push_back(p);
+   		}
 	}
-
-	return out;
+  	return out;
 }
+
 
 #endif

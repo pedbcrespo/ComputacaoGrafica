@@ -21,7 +21,7 @@ int main(){
 
 	auto drawScanLine = [&](int i, int j, int k, Color c){
 		vec2 T[3] = {P[i], P[j], P[k]};
-		for(Pixel p : scanline2(T))
+		for(Pixel p : scanline(T))
 			Img(p.x, p.y) = c;
 	};
 
