@@ -30,6 +30,9 @@ int main(){
 	drawSimple(6, 7, 8, green);
 	drawSimple(9, 10, 11, green);
 	drawSimple(12, 13, 14, green);
+	vec2 G[3] = {vec2{10, 6}, vec2{10, 14}, vec2{6, 8}};
+	for (Pixel p : rasterizeTriangle(G))
+		Img(p.x, p.y) = green;
 	drawSimple(1, 1, 1, red); // degenerado - ponto
 	drawSimple(3, 3, 4, red); // degenerado - reta
 	drawSimple(6, 8, 8, red); // degenerado	- reta
@@ -39,11 +42,12 @@ int main(){
 	drawScanLine(6, 7, 8, blue);
 	drawScanLine(9, 10, 11, blue);
 	drawScanLine(12, 13, 14, blue);
+	vec2 F[3] = {vec2{10, 6}, vec2{10, 14}, vec2{6, 8}};
+	for (Pixel p : scanline(F))
+		Img(p.x, p.y) = red;
 	drawScanLine(1, 1, 1, orange); // degenerado
 	drawScanLine(3, 3, 4, orange); // degenerado
 	drawScanLine(6, 8, 8, orange); // degenerado
-
-
 
 	Img.savePNG("output.png");
 }
