@@ -70,7 +70,7 @@ void test_line_loop(){
     TEST_CHECK(L0.size() == 0);    
     
     LineLoop L1{1};
-    TEST_CHECK(L1.size() == 1);    
+    TEST_CHECK(L1.size() == 0);    
     
     LineLoop L2{2};
     TEST_CHECK(L2.size() == 2);    

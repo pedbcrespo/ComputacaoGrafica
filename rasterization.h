@@ -181,8 +181,6 @@ std::vector<Pixel> scanline(const Tri& P) {
 			std::fmax(values[0], values[1]),
 			std::fmax(values[1], values[2])));
 
-		std::cout << min << std::endl << max << std::endl;
-
     	for (int x = min; x <= max; x++) {
 			Pixel p;
 			p.x = x;

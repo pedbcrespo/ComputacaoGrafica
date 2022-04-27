@@ -37,13 +37,13 @@ class LineStrip{
 	/* TAREFA: AULA 06 */
 	size_t n;
 	public:
-	LineStrip(size_t n_verts){ n = 0; }
+	LineStrip(size_t n_verts) { n = n_verts >= 2 ? n_verts - 1 : 0; }
 
 	size_t size() const{ return n; }
 
 	template<typename Vertex>
 	Line<Vertex> assemble(unsigned int i, const std::vector<Vertex>& V) const{
-		return { V[0], V[0] };
+		return { V[i], V[i + 1] };
 	}
 	/*****************************/
 };
@@ -53,14 +53,19 @@ class LineLoop{
 	/* TAREFA: AULA 06 */
 	size_t n;
 	public:
-	LineLoop(size_t n_verts){ n = 0; }
+	LineLoop(size_t n_verts){ n = n_verts >= 2 ? n_verts : 0; }
 
 	size_t size() const{ return n; }
 
 	template<typename Vertex>
 	Line<Vertex> assemble(unsigned int i, const std::vector<Vertex>& V) const{
-		return { V[0], V[0] };
-	}
+		if (i < n - 1) {
+			return { V[i], V[i + 1] };
+		}
+		else{
+			return { V[i], V[0] };
+		}
+ 	}
 	/*****************************/
 };
 
@@ -86,13 +91,13 @@ class TriangleStrip{
 	/* TAREFA: AULA 06 */
 	size_t n;
 	public:
-	TriangleStrip(size_t n_verts){ n = 0; }
+	TriangleStrip(size_t n_verts){ n = n_verts > 1 ? n_verts - 2 : 0; }
 
 	size_t size() const{ return n; }
 
 	template<typename Vertex>
 	Triangle<Vertex> assemble(unsigned int i, const std::vector<Vertex>& V) const{
-		return { V[0], V[0], V[0] };
+		return { V[i], V[i+1], V[+2] };
 	}
 	/*****************************/
 };
@@ -102,13 +107,13 @@ class TriangleFan{
 	/* TAREFA: AULA 06 */
 	size_t n;
 	public:
-	TriangleFan(size_t n_verts){ n = 0; }
+	TriangleFan(size_t n_verts){ n = n_verts > 1 ? n_verts - 2 : 0; }
 
 	size_t size() const{ return n; }
 
 	template<typename Vertex>
 	Triangle<Vertex> assemble(unsigned int i, const std::vector<Vertex>& V) const{
-		return { V[0], V[0], V[0] };
+		return { V[0], V[i+1], V[i+2] };
 	}
 	/*****************************/
 };
