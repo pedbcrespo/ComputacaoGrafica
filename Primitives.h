@@ -91,13 +91,13 @@ class TriangleStrip{
 	/* TAREFA: AULA 06 */
 	size_t n;
 	public:
-	TriangleStrip(size_t n_verts){ n = n_verts > 1 ? n_verts - 2 : 0; }
+	TriangleStrip(size_t n_verts){ n = n_verts > 2 ? n_verts - 2 : 0; }
 
 	size_t size() const{ return n; }
 
 	template<typename Vertex>
 	Triangle<Vertex> assemble(unsigned int i, const std::vector<Vertex>& V) const{
-		return { V[i], V[i+1], V[+2] };
+		return { V[i], V[i+1], V[i+2] };
 	}
 	/*****************************/
 };
@@ -107,7 +107,7 @@ class TriangleFan{
 	/* TAREFA: AULA 06 */
 	size_t n;
 	public:
-	TriangleFan(size_t n_verts){ n = n_verts > 1 ? n_verts - 2 : 0; }
+	TriangleFan(size_t n_verts){ n = n_verts > 2 ? n_verts - 2 : 0; }
 
 	size_t size() const{ return n; }
 

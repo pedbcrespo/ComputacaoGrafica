@@ -166,13 +166,14 @@ std::vector<Pixel> scanline(const Tri& P) {
 	int ymax = floor(std::max({A[1], B[1], C[1]}));
 
 	std::vector<Pixel> out;
+	Pixel p;
 
-	for (int y = ymin; y <= ymax; y++) {
+	for (p.y = ymin; p.y <= ymax; p.y++) {
 		std::vector<float> values;
 
-		values.push_back(inter(A, B, y));
-		values.push_back(inter(B, C, y));
-		values.push_back(inter(C, A, y));
+		values.push_back(inter(A, B, p.y));
+		values.push_back(inter(B, C, p.y));
+		values.push_back(inter(C, A, p.y));
 
 		int min = ceil(std::fmin(
 			std::fmin(values[0], values[1]),
@@ -181,10 +182,7 @@ std::vector<Pixel> scanline(const Tri& P) {
 			std::fmax(values[0], values[1]),
 			std::fmax(values[1], values[2])));
 
-    	for (int x = min; x <= max; x++) {
-			Pixel p;
-			p.x = x;
-			p.y = y;
+    	for (p.x = min; p.x <= max; p.x++) {
 			out.push_back(p);
    		}
 	}
