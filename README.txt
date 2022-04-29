@@ -22,3 +22,5 @@ Semana 06: [ PROX ]
 
   [ ] - Fazer figura com vários quadrados
          usando matriz rotação 
+
+  [ ] - Fazer círculo com borboletas
