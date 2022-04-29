@@ -17,3 +17,8 @@ Semana 04: [ EM PROGRESSO ]
   [ ] - Implementar classes Triangle, TriangleStrip e TriangleFan [ Primitives.h ] (Não atribuído)
 
 Semana 05: [ PROX ]
+
+Semana 06: [ PROX ] 
+
+  [ ] - Fazer figura com vários quadrados
+         usando matriz rotação 
