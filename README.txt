@@ -8,19 +8,20 @@ Semana 03: [ FEITO ]
 
   [x] - Fazer boneco com funções implícitas
 
-Semana 04: [ EM PROGRESSO ]
+Semana 04: [ FEITO ]
 
-  [ ] - Implementar função ScanLine. [ raterization.h ] (Caio)
+  [x] - Implementar função ScanLine. [ raterization.h ] (Caio)
 
-  [ ] - Implementar classes Line, LineStrip e LineLoop [ Primitives.h ] (Não atribuído)
+  [x] - Implementar classes Line, LineStrip e LineLoop [ Primitives.h ] (Não atribuído)
   
-  [ ] - Implementar classes Triangle, TriangleStrip e TriangleFan [ Primitives.h ] (Não atribuído)
+  [x] - Implementar classes Triangle, TriangleStrip e TriangleFan [ Primitives.h ] (Não atribuído)
 
-Semana 05: [ PROX ]
-
-Semana 06: [ PROX ] 
+Semana 05: [ FEITO ]
 
   [ ] - Fazer figura com vários quadrados
          usando matriz rotação 
 
   [ ] - Fazer círculo com borboletas
+
+Semana 06: [ PROX ] 
+
