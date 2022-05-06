@@ -25,3 +25,7 @@ Semana 05: [ FEITO ]
 
 Semana 06: [ PROX ] 
 
+  [ ] - Implementar função draw_primitive (Slide 11 - Aula 9)
+
+  [ ] - implementar função clip, ou seja, algorítimo Cyrus-Back (Slide 28 - Aula 09)
+
