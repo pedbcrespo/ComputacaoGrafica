@@ -18,14 +18,16 @@ Semana 04: [ FEITO ]
 
 Semana 05: [ FEITO ]
 
-  [ ] - Fazer figura com vários quadrados
+  [x] - Fazer figura com vários quadrados
          usando matriz rotação 
 
-  [ ] - Fazer círculo com borboletas
+  [x] - Fazer círculo com borboletas
 
 Semana 06: [ PROX ] 
 
   [ ] - Implementar função draw_primitive (Slide 11 - Aula 9)
 
   [ ] - implementar função clip, ou seja, algorítimo Cyrus-Back (Slide 28 - Aula 09)
+
+  [ ] - Implementar a função rotate no arquivo transforms.h (Slide 46 - Aula 10)
 
