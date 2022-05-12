@@ -55,22 +55,16 @@ class Graphics2D{
 	}
 
 	void drawPrimitive(Triangle<Vec2Col> tri){
-		Triangle<vec2> T = { tri[0].position, tri[1].position, tri[2].position };
-		Triangle<Color> C = { tri[0].color, tri[1].color, tri[2].color };
-		
-		for (Pixel p: rasterizeTriangle(T)) {
-			float t1 = find_mix_param(toVec2(p), T[0], T[1]);
-			Vec2Col vecCol_1;
-			vecCol_1.color = lerp(t1, C[0], C[1]);
-			vecCol_1.position = lerp(t1, T[0], T[1]);
-
-			float t2 = find_mix_param(toVec2(p), T[1], T[2]);
-			Vec2Col vecCol_2;
-			vecCol_2.color = lerp(t2, C[1], C[2]);
-			vecCol_2.position = lerp(t2, T[1], T[2]);
-
-			float t = find_mix_param(toVec2(p), vecCol_1.position, vecCol_2.position);
-			Color color = lerp(t, vecCol_1.color, vecCol_2.color);
+		vec2 vec_0 = tri[0].position, vec_1 = tri[1].position, vec_2 = tri[2].position;
+		Color cor_0 = tri[0].color, cor_1 = tri[1].color, cor_2 = tri[2].color;
+        std::array<vec2,3> pontos={vec_0,vec_1,vec_2};
+        for(Pixel p: rasterizeTriangle(pontos)){
+            vec2 v = {(float)p.x, (float)p.y};
+			vec3 pontosBaricentro = barycentric(v, pontos);
+			std::array<float, 3> cobari{pontosBaricentro[0],
+										pontosBaricentro[1],
+										pontosBaricentro[2]};
+			Color color = toColor((cobari[0]*toVec3(cor_0)) + (cobari[1]*toVec3(cor_1)) + (cobari[2]*toVec3(cor_2)));
 			paint(p, color);
 		}
 	}
