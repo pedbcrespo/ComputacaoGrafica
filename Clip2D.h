@@ -30,7 +30,43 @@ struct ClipRectangle{
 
 
 bool clip(Line<Vec2Col>& line, ClipRectangle rect){
-	/**************** TAREFA - AULA 09 **************/
+	float maxIn = 0;
+	float minOut = 1;
+
+ 	vec2 A = line[0].position;
+    vec2 B = line[1].position;
+
+	for (Semiplane s: rect.sides()) {
+
+		if(!s.has(A) && !s.has(B)) {
+            return false;
+        }
+
+		if(s.has(A) && s.has(B)) {
+            continue;
+        }
+
+		float t = s.intersect(A,B);
+
+		if(s.has(A) && !s.has(B)) {
+           minOut = std::min(minOut, t);
+        }
+
+		if(!s.has(A) && s.has(B)) {
+           maxIn = std::max(maxIn, t);
+        }
+
+		if (maxIn > minOut) {
+			return false;
+		}
+
+		Vec2Col A = lerp(1 - maxIn, line[0], line[1]);
+		Vec2Col B = lerp(1 - minOut, line[0], line[1]);
+
+		line[0] = A;
+		line[1] = B;
+	}
+
 	return true;
 }
 
