@@ -60,11 +60,23 @@ bool clip(Line<Vec2Col>& line, ClipRectangle rect){
 			return false;
 		}
 
-		Vec2Col A = lerp(1 - maxIn, line[0], line[1]);
-		Vec2Col B = lerp(1 - minOut, line[0], line[1]);
+		// vec2 a = (1 - maxIn)*A + maxIn*B;
+        // vec2 b = (1 - minOut)*A + minOut*B;
 
-		line[0] = A;
-		line[1] = B;
+		vec2 a = lerp(maxIn, A, B);
+		vec2 b = lerp(minOut, A, B);
+
+		Color c1 = toColor((1 - maxIn)*toVec3(line[0].color) + maxIn*toVec3(line[1].color));
+		Color c2 = toColor((1 - minOut)*toVec3(line[0].color) + minOut*toVec3(line[1].color));
+
+		line[0] = {{a}, {c1}};
+		line[1] = {{b}, {c2}};
+
+		// Vec2Col a = lerp(maxIn, line[0], line[1]);
+		// Vec2Col b = lerp(minOut, line[0], line[1]);
+
+		// line[0] = a;
+		// line[1] = b;
 	}
 
 	return true;
