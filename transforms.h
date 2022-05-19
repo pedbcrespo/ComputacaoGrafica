@@ -85,24 +85,22 @@ inline mat4 rotate(vec3 n, float theta){
 }
 
 inline mat4 lookAt(vec3 eye, vec3 center, vec3 up){
-	up = normalize(up);
-	vec3 f = normalize(center - eye);
-    vec3 s = normalize(cross(f,up));
-    vec3 u = cross(s,f);
-    mat4 M1 =
-            {
-                    s[0],     s[1],     s[2],     0.0,
-                    u[0],     u[1],     u[2],     0.0,
-                    -f[0],    -f[1],    -f[2],     0.0,
-                    0.0,     0.0,     0.0,     1.0
-            };
-    mat4 M2 =
-            {
-                    1.0,  0.0,  0.0,  -eye[0],
-                    0.0,  1.0,  0.0,  -eye[1],
-                    0.0,  0.0,  1.0,  -eye[2],
-                    0.0,  0.0,  0.0,   1.0
-            };
+	vec3 vetorUpNormalizado = normalize(up);
+	vec3 direcaoDoPontoObservado = normalize(center - eye);
+    vec3 vecSperpendicular = normalize(cross(direcaoDoPontoObservado, vetorUpNormalizado));
+    vec3 vecUperpendicular = cross(vecSperpendicular, direcaoDoPontoObservado);
+    mat4 M1 = {
+        vecSperpendicular[0], vecSperpendicular[1], vecSperpendicular[2], 0.0,
+        vecUperpendicular[0], vecUperpendicular[1], vecUperpendicular[2], 0.0,
+        -direcaoDoPontoObservado[0], -direcaoDoPontoObservado[1], -direcaoDoPontoObservado[2], 0.0,
+        0.0, 0.0, 0.0, 1.0
+    };
+    mat4 M2 = {
+        1.0,  0.0,  0.0,  -eye[0],
+        0.0,  1.0,  0.0,  -eye[1],
+        0.0,  0.0,  1.0,  -eye[2],
+        0.0,  0.0,  0.0,   1.0
+    };
 	return M1*M2;
 }
 
