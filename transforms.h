@@ -85,13 +85,25 @@ inline mat4 rotate(vec3 n, float theta){
 }
 
 inline mat4 lookAt(vec3 eye, vec3 center, vec3 up){
-	/* TAREFA - aula 11 */
-	return {
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	};
+	up = normalize(up);
+	vec3 f = normalize(center - eye);
+    vec3 s = normalize(cross(f,up));
+    vec3 u = cross(s,f);
+    mat4 M1 =
+            {
+                    s[0],     s[1],     s[2],     0.0,
+                    u[0],     u[1],     u[2],     0.0,
+                    -f[0],    -f[1],    -f[2],     0.0,
+                    0.0,     0.0,     0.0,     1.0
+            };
+    mat4 M2 =
+            {
+                    1.0,  0.0,  0.0,  -eye[0],
+                    0.0,  1.0,  0.0,  -eye[1],
+                    0.0,  0.0,  1.0,  -eye[2],
+                    0.0,  0.0,  0.0,   1.0
+            };
+	return M1*M2;
 }
 
 
@@ -121,13 +133,12 @@ inline mat4 frustum(float l, float r, float b, float t, float n, float f){
 }
 
 inline mat4 perspective(float fovy, float aspect, float Near, float Far){
-	/* TAREFA - aula 12*/
-	return {
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	};
+	float rad = (M_PI*fovy)/180;
+	float resultNear = Near*tan(rad/2);
+	float resultTop = -resultNear;
+	float resultTopAspect = resultNear*aspect;
+	float resultLeft = -resultTopAspect;
+	return frustum(resultLeft, resultTopAspect, resultTop, resultNear, -Near, -Far);
 }
 
 #endif
