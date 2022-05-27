@@ -69,6 +69,22 @@ template<class Varying>
 std::vector<Varying> clip(const std::vector<Varying>& polygon, vec4 n){
 	std::vector<Varying> R;
 	/* TAREFA - AULA 14 */
+	for(unsigned int i=0; i<polygon.size(); i++){
+		Varying P = polygon[i];
+		Varying Q = polygon[(i+1)%polygon.size()];
+		vec4 posP = getPosition(P);
+		vec4 posQ = getPosition(Q);
+		bool pDentro = (dot(posP, n) >= 0);
+		bool qDentro = (dot(getPosition(Q), n) >= 0);
+		if(pDentro != qDentro){
+			float intersec = dot(posP, n)/(dot(posP, n) - dot(posQ, n));
+			Varying interpol = (1-intersec)*P+intersec*Q;
+			R.push_back(interpol);
+		}
+		if(qDentro) {
+			R.push_back(Q);
+		}
+	}
 	return R;
 }
 
