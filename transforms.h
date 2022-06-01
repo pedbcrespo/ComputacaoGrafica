@@ -136,7 +136,7 @@ inline mat4 perspective(float fovy, float aspect, float Near, float Far){
 	float resultTop = -resultNear;
 	float resultTopAspect = resultNear*aspect;
 	float resultLeft = -resultTopAspect;
-	return frustum(resultLeft, resultTopAspect, resultTop, resultNear, -Near, -Far);
+	return frustum(resultLeft, resultTopAspect, resultTop, resultNear, Near, Far);
 }
 
 #endif
