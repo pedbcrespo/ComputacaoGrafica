@@ -53,7 +53,7 @@ int main(){
 	meshes.emplace_back(
 		"models/floor/floor.obj", 
 		scale(35, 35, 35), 
-		"textures/Wood.jpg");
+		"../../textures/Wood.jpg");
 
 	// meshes.emplace_back(
 	// 	"modelos/box.obj", 

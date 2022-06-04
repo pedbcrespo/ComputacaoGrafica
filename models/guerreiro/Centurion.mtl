@@ -12,7 +12,7 @@ newmtl Material__8
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Legion_centurion_texture.jpg
+	map_Kd Legion_centurion_texture.jpg
 	
 
 newmtl Material__10
@@ -26,5 +26,5 @@ newmtl Material__10
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Machete_Texture.jpg
+	map_Kd Machete_Texture.jpg
 	

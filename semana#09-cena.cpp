@@ -51,8 +51,17 @@ int main(){
 	std::vector<Mesh> meshes;
 
 	meshes.emplace_back(
+		"models/floor/floor.obj", 
+		scale(35, 35, 35), 
+		"../../textures/Wood.jpg");
+
+	meshes.emplace_back(
 		"models/guerreiro/Centurion.obj",
-        translate(100, 1, -6)*rotate_y(-0.4));
+        translate(1, 1.5, 0)*scale(0.005, 0.005, 0.005));
+
+	meshes.emplace_back(
+		"models/pose/pose.obj", 
+		translate(1, 0, 0)*scale(0.016, 0.016, 0.016));
 
 	// meshes.emplace_back(
 	// 	"modelos/box.obj", 
