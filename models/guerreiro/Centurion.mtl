@@ -12,8 +12,8 @@ newmtl Material__8
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka A:\Repos\Trabalhos\ComputacaoGrafica\modelos\guerreiro\source\Legion_centurion_texture.jpg
-	map_Kd A:\Repos\Trabalhos\ComputacaoGrafica\modelos\guerreiro\source\Legion_centurion_texture.jpg
+	map_Ka Legion_centurion_texture.jpg
+	
 
 newmtl Material__10
 	Ns 10.0000
@@ -26,5 +26,5 @@ newmtl Material__10
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka A:\Repos\Trabalhos\ComputacaoGrafica\modelos\guerreiro\source\Machete_Texture.jpg
-	map_Kd A:\Repos\Trabalhos\ComputacaoGrafica\modelos\guerreiro\source\Machete_Texture.jpg
+	map_Ka Machete_Texture.jpg
+	
