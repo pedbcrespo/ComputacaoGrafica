@@ -114,7 +114,7 @@ int main(){
 		}
 
 		char filename[30];
-		sprintf(filename, "anim/output%03d.png", k);
+		sprintf(filename, "./anim/output%03d.png", k);
 		puts(filename);
 		G.savePNG(filename);
 	}
