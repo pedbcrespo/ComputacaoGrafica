@@ -3,45 +3,45 @@
 #include "transforms.h"
 #include "Color.h"
 #include "GLutils.h"
-
-struct Vec3Col{
-	vec3 position;
-	Color color;
-};
+#include "VertexUtils.h"
 
 VAO vao;
 GLBuffer vbo, ebo;
 ShaderProgram shaderProgram;
+int n_verts;
 float angle = 0;
 	
-void init(){
-	glewInit();
-	enable_debug();
+void init_surface(int m, int n){
+	int N = m*n;
 
-	glEnable(GL_DEPTH_TEST);
-	
-	shaderProgram = ShaderProgram{
-		Shader{"ColorShader.vert", GL_VERTEX_SHADER},
-		Shader{"ColorShader.frag", GL_FRAGMENT_SHADER}
-	};
-	glUseProgram(shaderProgram);
-	
-	std::vector<Vec3Col> V = {
-		{{0, 0, 0}, red},
-		{{1, 0, 0}, red},
-		{{1, 1, 0}, green},
-		{{0, 1, 0}, green},
-		{{0, 0, 1}, blue},
-		{{1, 0, 1}, blue},
-		{{1, 1, 1}, yellow},
-		{{0, 1, 1}, yellow}
-	};
+	float u0 = -5, u1 = 5, du = (u1-u0)/(m-1),
+              v0 = -5, v1 = 5, dv = (v1-v0)/(n-1);
 
-	std::vector<unsigned int> indices = {
-		4, 5, 7,   6, 7, 5,
-		5, 1, 6,   2, 6, 1,
-		6, 2, 7,   3, 7, 2
-	};
+	std::vector<Vec3Col> V(N);
+	for(int i = 0; i < m; i++){
+		for(int j = 0; j < n; j++){
+			float u = u0 + i*du;
+			float v = v0 + j*dv;
+
+			size_t ij = i + j*m;
+			V[ij].position = {u, v, (float)sin(u*v/4)};
+			
+			float s = i/(m-1.0);
+			float t = j/(n-1.0);
+			V[ij].color = bilerp(s, t, red, blue, green, yellow);
+		}
+	}
+
+	std::vector<unsigned int> indices;
+	for(int i = 0; i < m-1; i++){
+		for(int j = 0; j < n-1; j++){	
+			unsigned int ij = i + j*m;
+			indices.insert(indices.end(), {
+				ij, ij+1, ij+m,
+				ij+m+1, ij+m, ij+1
+			});
+		}
+	}
 
 	vao = VAO{true};
 	glBindVertexArray(vao);
@@ -61,24 +61,40 @@ void init(){
 	
 	ebo = GLBuffer{GL_ELEMENT_ARRAY_BUFFER};
 	ebo.data(indices, GL_STATIC_DRAW);
+
+	n_verts = indices.size();
+}
+
+void init(){
+	glewInit();
+	glEnable(GL_DEPTH_TEST);
 	
+	shaderProgram = ShaderProgram{
+		Shader{"ColorShader.vert", GL_VERTEX_SHADER},
+		Shader{"ColorShader.frag", GL_FRAGMENT_SHADER}
+	};
+	glUseProgram(shaderProgram);
+
+	init_surface(100, 100);
 }
 
 void desenha(){
 	glClearColor(1, 1, 1, 1);	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	mat4 Model = rotate_y(angle)*translate(-0.5, -0.5, -0.5);
-	mat4 View = lookAt({1.5, 1.5, 1.5}, {0, 0, 0}, {0, 1, 0});
+	mat4 Model = rotate_z(angle);
+	mat4 View = lookAt({10, 10, 10}, {0, 0, 0}, {0, 0, 1});
 	int w = glutGet(GLUT_WINDOW_WIDTH);
 	int h = glutGet(GLUT_WINDOW_HEIGHT);
 	float a = w/(float)h;
-	mat4 Projection = perspective(60, a, 0.1, 5);
+	mat4 Projection = perspective(50, a, 0.1, 50);
 
 	Uniform{"M"} = Projection*View*Model;
 
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, n_verts, GL_UNSIGNED_INT, 0);
 
 	glutSwapBuffers();
 }
@@ -86,14 +102,14 @@ void desenha(){
 int last_x;
 
 void mouse(int button, int state, int x, int y){
-    last_x = x;
+	last_x = x;
 }
 
 void mouseMotion(int x, int y){
-    int dx = x - last_x;
-    angle += dx*0.01;
-    last_x = x;
-    glutPostRedisplay();
+	int dx = x - last_x;
+	angle += dx*0.01;
+	last_x = x;
+	glutPostRedisplay();
 }
 
 
@@ -105,8 +121,9 @@ int main(int argc, char* argv[]){
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 	glutCreateWindow("janela");
 	glutDisplayFunc(desenha);
+	
 	glutMouseFunc(mouse);
-    glutMotionFunc(mouseMotion);
+	glutMotionFunc(mouseMotion);
 
 	printf("GL Version: %s\n", glGetString(GL_VERSION));
 	printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
