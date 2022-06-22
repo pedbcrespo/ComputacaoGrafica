@@ -36,7 +36,7 @@ void etapaBaseDesenho(){
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glBindVertexArray(vao);
-	glDrawElements(GL_LINES, n_verts, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_LINE_STRIP, n_verts, GL_UNSIGNED_INT, 0);
 
 	glutSwapBuffers();
 }
@@ -46,30 +46,25 @@ void desenha(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     std::vector<Vec2Col> V = {
-        {0.21, 1.17},
-        {0.42, 1.17},
-        {0.63, 1.17},
-        {0.84, 1.17},
-        {1.05, 1.17},
-        {1.26, 1.17},
-        {1.47, 1.17},
-        {0.21, 0.17},
-        {0.42, 0.17},
-        {0.63, 0.17},
-        {0.84, 0.17},
-        {1.05, 0.17},
-        {1.26, 0.17},
-        {1.47, 0.17},
+        {1.45,0.68},
+        {1.37,0.94},
+        {1.17,1.16},
+        {0.90,1.26},
+        {0.62,1.23},
+        {0.38,1.07},
+        {0.25,0.81},
+        {0.25,0.52},
+        {0.38,0.27},
+        {0.62,0.10},
+        {0.90,0.07},
+        {1.17,0.17},
+        {1.36,0.39},
     };
 
     int m=7, n=14;
-	std::vector<unsigned int> indices;
-	for(int i = 0; i <= 6; i++){
-		for(int j = 7; j < 14; j++){	
-            indices.push_back(i);
-            indices.push_back(j);
-		}
-	}
+	std::vector<unsigned int> indices = {
+      0,3,6,9,12,2,5,8,11,1,4,7,10,0  
+    };
 
 	vao = VAO{true};
 	glBindVertexArray(vao);
