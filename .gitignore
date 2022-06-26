@@ -1,7 +1,7 @@
 *.o
 *.out
 *.swp
-*.png
+output.png
 *.exe
 anim
 aula*
