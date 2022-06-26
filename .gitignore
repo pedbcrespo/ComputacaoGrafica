@@ -1,7 +1,8 @@
-anim
 *.o
 *.out
 *.swp
+*.png
+*.exe
+anim
 aula*
-output.png
 .vscode
