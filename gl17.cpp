@@ -206,7 +206,6 @@ mat4 BaseView = lookAt({0, 7, 20}, {0, 7, 0}, {0, 1, 0});
 float vangle = 0;
 
 void init_scene(){
-
 	meshes.emplace_back(
 		"modelos/bunny.obj", 
 		translate(0, 5.2, 2), 
